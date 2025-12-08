@@ -1,7 +1,8 @@
 /// API constants untuk semua endpoint dan base URL
 class ApiConstants {
-  static const String baseUrl = 'https://uncondemnable-ariana-undependable.ngrok-free.dev/api';
-  static const String baseImage = 'https://uncondemnable-ariana-undependable.ngrok-free.dev/storage/';
+  // Untuk web gunakan localhost, untuk Android emulator gunakan 10.0.2.2
+  static const String baseUrl = 'http://localhost/healthybite-clean/backend/public/api';
+  static const String baseImage = 'http://localhost/healthybite-clean/backend/public/storage/';
 
   static const String login = '$baseUrl/login';
   static const String register = '$baseUrl/register';

@@ -41,6 +41,11 @@ class AuthService {
   /// Melakukan login dan mendapatkan access token
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
+      _dio.options.connectTimeout = const Duration(seconds: 10);
+      _dio.options.receiveTimeout = const Duration(seconds: 10);
+      
+      print("Attempting login to: ${ApiConstants.login}");
+      
       final response = await _dio.post(
         ApiConstants.login,
         data: {
@@ -50,11 +55,14 @@ class AuthService {
         options: Options(
           headers: {
             'Accept': 'application/json',
-            'ngrok-skip-browser-warning': 'true',
+            'Content-Type': 'application/json',
           },
           validateStatus: (status) => status! < 500,
         ),
       );
+
+      print("Response status: ${response.statusCode}");
+      print("Response data: ${response.data}");
 
       if (response.statusCode == 200) {
         return response.data;
@@ -62,9 +70,20 @@ class AuthService {
         throw response.data['message'] ?? 'Login Gagal';
       }
     } on DioException catch (e) {
-      print("Dio Error: ${e.response?.data}");
-      throw 'Gagal terhubung ke server. Cek koneksi internet.';
+      print("Dio Error Type: ${e.type}");
+      print("Dio Error Message: ${e.message}");
+      print("Dio Error Response: ${e.response?.data}");
+      
+      if (e.type == DioExceptionType.connectionTimeout || 
+          e.type == DioExceptionType.receiveTimeout) {
+        throw 'Timeout: Server tidak merespons. Pastikan Laragon running.';
+      } else if (e.type == DioExceptionType.connectionError) {
+        throw 'Koneksi gagal. Pastikan backend Laravel berjalan di http://localhost/healthybite-clean/backend/public';
+      }
+      
+      throw 'Gagal terhubung ke server: ${e.message}';
     } catch (e) {
+      print("General Error: $e");
       throw e.toString();
     }
   }
