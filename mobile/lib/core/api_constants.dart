@@ -6,8 +6,11 @@ class ApiConstants {
   // - Untuk web: gunakan localhost
   
   // Untuk Android Emulator gunakan 10.0.2.2 (special IP untuk host machine)
-  static const String baseUrl = 'http://localhost:8000/api';
-  static const String baseImage = 'http://localhost:8000/storage/';
+  // static const String baseUrl = 'http://localhost:8000/api';
+  static const String baseUrl = 'http://10.0.2.2/healthybite-clean/backend/public/api';
+  static const String baseImage = 'http://10.0.2.2/healthybite-clean/backend/public/storage/';
+
+  // static const String baseImage = 'http://localhost:8000/storage/';
   static const String login = '$baseUrl/login';
   static const String register = '$baseUrl/register';
   static const String banners = '$baseUrl/banners';
