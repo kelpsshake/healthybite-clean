@@ -47,8 +47,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Color(0xFF305089),
-                        Color(0xFF267ED1),
+                        Color(0xFF2E7D32),
+                        Color(0xFF4CAF50),
                       ],
                     ),
                   ),
@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       const SizedBox(height: 20),
 
-                      Image.asset('assets/images/login-ill.png', height: 140)
+                      Image.asset('assets/images/logo1.png', height: 140)
                           .animate()
                           .scale(duration: 600.ms, curve: Curves.easeOutBack),
 
@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 8),
 
                       Text(
-                        "Silakan login menggunakan akun\nMahasiswa atau Mitra UTB Eats.",
+                        "Silakan login menggunakan akun\nAnda atau Mitra Healthy Bite.",
                         textAlign: TextAlign.center,
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 14,

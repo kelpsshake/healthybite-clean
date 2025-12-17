@@ -1,8 +1,13 @@
-/// API constants untuk semua endpoint dan base URL
+﻿/// API constants untuk semua endpoint dan base URL
 class ApiConstants {
-  // Untuk web gunakan localhost, untuk Android emulator gunakan 10.0.2.2
-  static const String baseUrl = 'http://localhost/healthybite-clean/backend/public/api';
-  static const String baseImage = 'http://localhost/healthybite-clean/backend/public/storage/';
+  // PENTING: Gunakan IP komputer untuk testing di device/emulator
+  // - Untuk Android Emulator: gunakan 10.0.2.2
+  // - Untuk device fisik/iOS: gunakan IP komputer (10.231.125.189)
+  // - Untuk web: gunakan localhost
+  
+  // Untuk Android Emulator gunakan 10.0.2.2 (special IP untuk host machine)
+  static const String baseUrl = 'http://10.0.2.2/healthybite-clean/backend/public/api';
+  static const String baseImage = 'http://10.0.2.2/healthybite-clean/backend/public/storage/';
 
   static const String login = '$baseUrl/login';
   static const String register = '$baseUrl/register';

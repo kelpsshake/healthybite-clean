@@ -189,7 +189,7 @@ class _CartScreenState extends State<CartScreen> {
                         final index = entry.key;
                         final item = entry.value;
                         return _buildCartItem(context, item, cart, index);
-                      }).toList(),
+                      }),
 
                       const SizedBox(height: 100), // Spacer bawah
                     ],

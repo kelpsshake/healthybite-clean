@@ -58,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: const Color(0xFF1B5E20),
       body: Stack(
         children: [
           Positioned(
@@ -72,7 +72,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF3B82F6).withOpacity(0.4),
+                            color: const Color(0xFF4CAF50).withOpacity(0.5),
                             blurRadius: 100,
                             spreadRadius: 20,
                           ),
@@ -101,7 +101,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF67B342).withOpacity(0.3),
+                            color: const Color(0xFF81C784).withOpacity(0.4),
                             blurRadius: 100,
                             spreadRadius: 20,
                           ),
@@ -129,7 +129,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF1E3A8A).withOpacity(0.5),
+                    color: const Color(0xFF2E7D32).withOpacity(0.5),
                     blurRadius: 120,
                     spreadRadius: 50,
                   ),
@@ -143,12 +143,12 @@ class _SplashScreenState extends State<SplashScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                      width: 140,
-                      height: 140,
-                      padding: const EdgeInsets.all(25),
+                      width: 200,
+                      height: 200,
+                      padding: const EdgeInsets.all(30),
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(35),
+                        borderRadius: BorderRadius.circular(45),
                         border: Border.all(
                           color: Colors.white.withOpacity(0.2),
                           width: 1.5,
@@ -160,14 +160,14 @@ class _SplashScreenState extends State<SplashScreen> {
                             offset: const Offset(0, 15),
                           ),
                           BoxShadow(
-                            color: const Color(0xFF3B82F6).withOpacity(0.3),
+                            color: const Color(0xFF4CAF50).withOpacity(0.4),
                             blurRadius: 50,
                             spreadRadius: -10,
                           ),
                         ],
                       ),
                       child: Image.asset(
-                        'assets/images/logo.png',
+                        'assets/images/logo2.png',
                         fit: BoxFit.contain,
                       ),
                     )
@@ -182,7 +182,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 const SizedBox(height: 50),
 
                 Text(
-                      "UTB EATS",
+                      "HEALTHY BITE",
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 42,
                         fontWeight: FontWeight.w900,
@@ -215,7 +215,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 const SizedBox(height: 12),
 
                 Text(
-                  "Digital Canteen Solution",
+                  "Bite Better, Live Better",
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,

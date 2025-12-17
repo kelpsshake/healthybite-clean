@@ -119,7 +119,7 @@
 
         /* -- KANAN: VISUAL AREA -- */
         .visual-side {
-            background: linear-gradient(135deg, #305089 0%, #267ED1 100%);
+            background: linear-gradient(135deg, #67B342 0%, #559635 100%);
             color: white;
             display: flex;
             flex-direction: column;
@@ -194,9 +194,9 @@
         <div class="col-lg-6 form-side">
             <div class="mb-5">
                 <div class="d-flex align-items-center mb-4">
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo UTB" class="brand-logo me-3">
+                    <img src="{{ asset('images/logo1.png') }}" alt="Logo UTB" class="brand-logo me-3">
                     <div>
-                        <h4 class="fw-bold text-dark m-0 lh-1">UTB Eats</h4>
+                        <h4 class="fw-bold text-dark m-0 lh-1">Healty Bite</h4>
                         <small class="text-muted" style="font-size: 0.75rem; letter-spacing: 1px;">ADMIN PANEL</small>
                     </div>
                 </div>
@@ -222,7 +222,7 @@
                     <label class="form-label">Email Address</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                        <input type="email" name="email" class="form-control" placeholder="nama@utb.ac.id"
+                        <input type="email" name="email" class="form-control" placeholder="nama@healtybite.com"
                             value="{{ old('email') }}" required autofocus>
                     </div>
                 </div>
@@ -252,7 +252,7 @@
 
                 <div class="text-center mt-4">
                     <p class="text-muted small mb-0">
-                        Belum punya akun? <a href="#" class="support-link">Hubungi IT Kampus</a>
+                        Belum punya akun? <a href="#" class="support-link">Hubungi IT Healty Bite</a>
                     </p>
                 </div>
             </form>
@@ -262,10 +262,10 @@
             <div class="circle-bg"></div>
 
             <div class="visual-content">
-                <img src="{{ asset('images/login-ill.svg') }}" alt="Illustration" class="img-fluid mb-4"
+                <img src="{{ asset('images/logo2.png') }}" alt="Illustration" class="img-fluid mb-4"
                     style="max-height: 320px; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.2));">
 
-                <h3 class="fw-bold mb-2">Digitalisasi Kantin Kampus.</h3>
+                <h3 class="fw-bold mb-2">Halaman Kontrol Admin</h3>
                 <p class="opacity-75 mb-4 px-4" style="line-height: 1.6;">
                     Pantau transaksi, kelola menu, dan lihat laporan penjualan harian dengan mudah dan transparan.
                 </p>

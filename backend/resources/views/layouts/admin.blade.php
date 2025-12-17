@@ -12,9 +12,9 @@
 
     <style>
         :root {
-            --utb-blue: #305089;
+            --utb-blue: #67B342;
             --utb-green: #67B342;
-            --utb-light-blue: #267ED1;
+            --utb-light-blue: #559635;
             --bg-gray: #f4f6f9;
         }
 
@@ -28,7 +28,7 @@
         .sidebar {
             min-width: 260px;
             max-width: 260px;
-            background: var(--utb-blue);
+            background: linear-gradient(180deg, #67B342 0%, #559635 100%);
             color: #fff;
             min-height: 100vh;
             transition: all 0.3s;
@@ -139,7 +139,7 @@
             icon: 'success',
             title: 'Berhasil!',
             text: '{{ session("success") }}',
-            confirmButtonColor: '#305089', // Biru UTB
+            confirmButtonColor: '#67B342', // Hijau Healty Bite
             timer: 3000 // Otomatis tutup dalam 3 detik
         });
     </script>

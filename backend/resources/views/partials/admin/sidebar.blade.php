@@ -1,9 +1,9 @@
 <div class="sidebar d-flex flex-column p-3 shadow">
     <div class="text-center mb-4 pt-2">
         <div class="bg-white rounded p-2 d-inline-block mb-2">
-            <img src="{{ asset('images/logo.png') }}" alt="UTB Logo" width="50">
+            <img src="{{ asset('images/logo1.png') }}" alt="UTB Logo" width="50">
         </div>
-        <h5 class="fw-bold m-0">UTB Eats</h5>
+        <h5 class="fw-bold m-0">Healty Bite</h5>
         <small class="text-white-50">Admin Panel</small>
     </div>
 

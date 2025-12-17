@@ -22,7 +22,7 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  int _quantity = 1;
+  final int _quantity = 1;
 
   // Helper Format Rupiah
   String formatRupiah(int price) {

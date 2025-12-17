@@ -45,6 +45,7 @@ class AuthService {
       _dio.options.receiveTimeout = const Duration(seconds: 10);
       
       print("Attempting login to: ${ApiConstants.login}");
+      print("Login credentials - Email: $email, Password length: ${password.length}");
       
       final response = await _dio.post(
         ApiConstants.login,
@@ -63,6 +64,7 @@ class AuthService {
 
       print("Response status: ${response.statusCode}");
       print("Response data: ${response.data}");
+      print("Response has access_token: ${response.data.containsKey('access_token')}");
 
       if (response.statusCode == 200) {
         return response.data;

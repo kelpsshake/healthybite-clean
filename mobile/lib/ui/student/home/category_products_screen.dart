@@ -10,8 +10,9 @@ import '../merchant/product_detail_screen.dart';
 
 class CategoryProductsScreen extends StatefulWidget {
   final String categoryName;
+  final String? categoryQuery; // optional custom query to search
 
-  const CategoryProductsScreen({super.key, required this.categoryName});
+  const CategoryProductsScreen({super.key, required this.categoryName, this.categoryQuery});
 
   @override
   State<CategoryProductsScreen> createState() => _CategoryProductsScreenState();
@@ -22,11 +23,49 @@ class _CategoryProductsScreenState extends State<CategoryProductsScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<HomeProvider>(
+      final provider = Provider.of<HomeProvider>(
         context,
         listen: false,
-      ).searchProducts(widget.categoryName);
+      );
+      // Gunakan categoryQuery jika tersedia, kalau tidak pakai categoryName
+      // Coba beberapa variasi kata kunci (fallback) agar kategori terlihat
+      _performSearchWithFallback(provider);
     });
+  }
+
+  /// Coba beberapa variasi query sampai ditemukan hasil
+  Future<void> _performSearchWithFallback(HomeProvider provider) async {
+    final List<String> attempts = [];
+
+    if (widget.categoryQuery != null && widget.categoryQuery!.trim().isNotEmpty) {
+      attempts.add(widget.categoryQuery!.trim());
+    }
+
+    // Tambahkan variasi berdasarkan label (mis. Food -> Makanan Berat)
+    switch (widget.categoryName.toLowerCase()) {
+      case 'food':
+        attempts.addAll(['Makanan Berat', 'Makanan', 'Food', 'food']);
+        break;
+      case 'snack':
+        attempts.addAll(['Snack & Cemilan', 'Snack', 'Cemilan', 'snack']);
+        break;
+      case 'drink':
+        attempts.addAll(['Minuman', 'Drink', 'drink']);
+        break;
+      default:
+        attempts.add(widget.categoryName);
+        attempts.add(widget.categoryName.toLowerCase());
+    }
+
+    // Pastikan tidak ada duplikat
+    final seen = <String>{};
+    final queries = attempts.where((q) => q.trim().isNotEmpty).map((q) => q.trim()).where((q) => seen.add(q)).toList();
+
+    for (final q in queries) {
+      await provider.searchProducts(q);
+      if (provider.searchResults.isNotEmpty) return;
+      // jika belum ada hasil, coba variasi berikutnya
+    }
   }
 
   String formatRupiah(int price) {

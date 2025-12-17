@@ -7,9 +7,12 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/app_theme.dart';
 import '../../../core/api_constants.dart';
 import '../../../data/models/merchant_model.dart';
+import '../../../data/models/product_model.dart';
 import '../../../providers/home_provider.dart';
 import '../merchant/merchant_detail_screen.dart';
+import '../merchant/product_detail_screen.dart';
 import 'category_products_screen.dart';
+import 'package:intl/intl.dart';
 
 class StudentHomeScreen extends StatefulWidget {
   const StudentHomeScreen({super.key});
@@ -40,6 +43,8 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
           _startAutoScroll(provider.banners.length);
         }
       });
+      // Load produk terlaris (semua produk)
+      provider.searchProducts('');
     });
   }
 
@@ -261,13 +266,11 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                         Text("Eksplor Kategori", style: GoogleFonts.plusJakartaSans(fontSize: 16, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 16),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            _buildCategoryItem("Nasi", Icons.rice_bowl_rounded, Colors.orange),
-                            _buildCategoryItem("Ayam", Icons.dinner_dining_rounded, Colors.red),
-                            _buildCategoryItem("Minum", Icons.local_cafe_rounded, Colors.brown),
+                            _buildCategoryItem("Food", Icons.restaurant_rounded, Colors.orange),
+                            _buildCategoryItem("Drink", Icons.local_cafe_rounded, Colors.brown),
                             _buildCategoryItem("Snack", Icons.fastfood_rounded, Colors.blue),
-                            _buildCategoryItem("Sehat", Icons.eco_rounded, Colors.green),
                           ],
                         ),
                       ],
@@ -276,7 +279,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                 ),
 
                 // =================================================
-                // 5. WARUNG PILIHAN (MASONRY STYLE GRID)
+                // 5. PRODUK TERLARIS (GRID PRODUCTS)
                 // =================================================
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -285,7 +288,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Warung Terlaris 🔥", style: GoogleFonts.plusJakartaSans(fontSize: 16, fontWeight: FontWeight.bold)),
+                          Text("Produk Terlaris 🔥", style: GoogleFonts.plusJakartaSans(fontSize: 16, fontWeight: FontWeight.bold)),
                           Text("Lihat Semua", style: GoogleFonts.plusJakartaSans(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600)),
                         ],
                       ),
@@ -294,9 +297,9 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                   ),
                 ),
                 
-                // GRID DYNAMIC
-                if (homeProvider.merchants.isEmpty)
-                   SliverToBoxAdapter(child: _buildEmptyState("Belum ada warung"))
+                // GRID DYNAMIC - PRODUCTS
+                if (homeProvider.searchResults.isEmpty)
+                   SliverToBoxAdapter(child: _buildEmptyState("Belum ada produk"))
                 else
                    SliverPadding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -305,13 +308,13 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                           crossAxisCount: 2,
                           mainAxisSpacing: 16,
                           crossAxisSpacing: 16,
-                          childAspectRatio: 0.75, // Kartu memanjang ke bawah (TikTok Style)
+                          childAspectRatio: 0.7,
                         ),
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
-                            return _buildPremiumMerchantCard(homeProvider.merchants[index]);
+                            return _buildProductCard(homeProvider.searchResults[index]);
                           },
-                          childCount: homeProvider.merchants.length,
+                          childCount: homeProvider.searchResults.length,
                         ),
                       ),
                    ),
@@ -331,12 +334,20 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
     String imageUrl = banner.imagePath.startsWith('http') 
         ? banner.imagePath 
         : "${ApiConstants.baseImage}${banner.imagePath}";
+    
+    print("Banner Image URL: $imageUrl"); // Debug: Lihat URL yang diminta
         
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        image: DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover),
+        image: DecorationImage(
+          image: NetworkImage(imageUrl), 
+          fit: BoxFit.cover,
+          onError: (exception, stackTrace) {
+            print("Error loading banner image: $exception");
+          },
+        ),
         boxShadow: [
           BoxShadow(color: AppColors.primary.withOpacity(0.2), blurRadius: 15, offset: const Offset(0, 8)),
         ],
@@ -361,15 +372,34 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
 
   Widget _buildCategoryItem(String label, IconData icon, Color color) {
     return GestureDetector(
-      onTap: () {
-        // Navigasi ke Halaman Kategori
-        Navigator.push(
+      onTap: () async {
+        // Mapping kategori ke string yang sesuai dengan database
+        String query;
+        switch (label.toLowerCase()) {
+          case 'food':
+            query = 'Makanan Berat';
+            break;
+          case 'snack':
+            query = 'Snack & Cemilan';
+            break;
+          case 'drink':
+            query = 'Minuman';
+            break;
+          default:
+            query = label;
+        }
+
+        // Navigasi ke Halaman Kategori (kirim juga query pencarian)
+        await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                CategoryProductsScreen(categoryName: label),
+            builder: (context) => CategoryProductsScreen(categoryName: label, categoryQuery: query),
           ),
         );
+
+        // Setelah kembali ke halaman utama, reload produk terlaris
+        final provider = Provider.of<HomeProvider>(context, listen: false);
+        provider.searchProducts('');
       },
       child: Column(
         children: [
@@ -492,6 +522,87 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                     ),
                   ],
                 ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProductCard(ProductModel product) {
+    String formatRupiah(int price) {
+      final formatter = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
+      return formatter.format(price);
+    }
+
+    String imageUrl = (product.image != null && product.image!.startsWith('http'))
+        ? product.image!
+        : "${ApiConstants.baseImage}${product.image}";
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ProductDetailScreen(
+              product: product,
+              merchantName: "Merchant",
+            ),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(color: Colors.grey.withOpacity(0.08), blurRadius: 10, offset: const Offset(0, 4)),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // GAMBAR PRODUK
+            Expanded(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                child: Image.network(
+                  imageUrl,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => Container(
+                    color: Colors.grey.shade200,
+                    child: const Icon(Icons.fastfood, color: Colors.grey, size: 40),
+                  ),
+                ),
+              ),
+            ),
+            // INFO PRODUK
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product.name,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    formatRupiah(product.price),
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

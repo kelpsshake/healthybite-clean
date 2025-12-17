@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4 py-3">
     <div class="container-fluid p-0">
         <span class="navbar-text text-muted">
-            Selamat Datang, <span class="fw-bold text-utb-blue">Admin Kampus</span>
+            Selamat Datang, <span class="fw-bold text-utb-blue">Admin Healty Bite</span>
         </span>
 
         <div class="d-flex align-items-center">

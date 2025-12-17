@@ -51,6 +51,7 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
 
     try {
+      print("Searching products for keyword: '$keyword'");
       final options = await _service.getHeaders();
       final response = await _service.dio.get(
         ApiConstants.searchProducts,
@@ -58,7 +59,18 @@ class HomeProvider with ChangeNotifier {
         options: options,
       );
 
-      List data = response.data['data'];
+      print('Search response raw: ${response.data}');
+
+      List data = [];
+      try {
+        data = response.data['data'];
+      } catch (e) {
+        print('Warning: response.data["data"] not present or malformed: $e');
+        // Try to use response.data directly if it's a list
+        if (response.data is List) {
+          data = response.data as List;
+        }
+      }
       _searchResults = data.map((e) => ProductModel.fromJson(e)).toList();
     } catch (e) {
       print("Error searching: $e");
